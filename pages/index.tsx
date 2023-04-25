@@ -23,7 +23,7 @@ export default function Home({ propertiesForRent, propertiesForSale }) {
     <div>
       <Box mt='2'><Banner purpose='Rent a Home' title1='title1' title2='title2' desc1='desc1' desc2='desc2' buttonText='Explore rental' linkName='/search?purpose=for-rent' imageUrl='https://www.looper.com/img/gallery/every-power-sasuke-has-on-naruto-explained/intro-1663193400.jpg' /></Box>
       <Flex flexWrap='wrap' justifyContent='center'>
-        {propertiesForSale.map((property: any) => (
+        {propertiesForRent.map((property: any) => (
           // <PropertyCard key={property.id} property={property} />
           <Property property={property} key={property.id} />
         )
@@ -34,20 +34,15 @@ export default function Home({ propertiesForRent, propertiesForSale }) {
 }
 
 export async function getStaticProps() {
-  console.log('before calling fetchApi')
-  const propertyForSale = await fetchApi('for-sale')
-  console.log('after calling fetchApi')
-  // const propertyForRent = await fetchApi('for-rent')
-  console.log('Properties for sale!')
-  console.log(propertyForSale)
-  // console.log(JSON.stringify(propertyForSale))
+  const propertyForSale = await fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-sale&hitsPerPage=6`);
+  const propertyForRent = await fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-rent&hitsPerPage=6`);
 
   return {
     props: {
-      propertiesForSale: (propertyForSale.hits),
-      // propertiesForRent: propertyForRent,
-    }
-  }
+      propertiesForSale: propertyForSale?.hits,
+      propertiesForRent: propertyForRent?.hits,
+    },
+  };
 }
 /* {propertiesForSale.map((property: any) => (
           // <PropertyCard key={property.id} property={property} />
